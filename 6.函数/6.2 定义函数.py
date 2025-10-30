@@ -13,6 +13,7 @@
 # print(my_abs(-2)) # ==> 2
 
 
+
 # 1. 空函数
 # 如果想定义一个什么事也不做的空函数，可以用pass语句
 # def nop():
@@ -24,6 +25,9 @@
 # if age >= 18:
 #     pass
 
+
+
+
 # 2. 参数检查
 # 数据类型检查可以用内置函数isinstance()实现
 # val = 12
@@ -31,6 +35,10 @@
 # print(isinstance(val, float)) # ==> False
 # print(isinstance(val, str)) # ==> False
 # print(isinstance(val, (str, float))) # ==> False
+# print(isinstance(val, (str, int))) # ==> True
+
+
+
 
 # 3. 返回多个值
 # 函数是可以一次性返回多个值的
