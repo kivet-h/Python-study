@@ -13,10 +13,31 @@
 # L = [x * x for x in range(10)]
 # print(L) # ==> [0, 1, 4, 9, 16, 25, 36, 49, 64, 81]
 
-g = (x * x for x in range(10))
-print(g) # ==> <generator object <genexpr> at 0x0000013F821CC1C8>
-# 如何打印generator的每一个元素？
-# 1. 一个一个打印：
-print(next(g)) # ==> 0
-print(next(g)) # ==> 1
-print(next(g))  # ==> 4
+# g = (x * x for x in range(5))
+# print(g) # ==> <generator object <genexpr> at 0x0000013F821CC1C8>
+#
+# # 如何打印generator的每一个元素？
+# # 1. 一个一个打印：
+# print(next(g)) # ==> 0
+# print(next(g)) # ==> 1
+# print(next(g))  # ==> 4
+# print(next(g))  # ==> 9
+# print(next(g))  # ==> 16
+# print(next(g))  # ==> 25
+# print(next(g))  # ==> 抛出StopIteration的错误。
+
+# generator保存的是算法，每次调用next(g)，就计算出g的下一个元素的值，直到计算到最后一个元素，没有更多的元素时，抛出StopIteration的错误。
+
+# 一直调用next(g)十分不友好，generator也是可迭代对象，可直接使用for循环进行循环
+# g = (x * x for x in range(5))
+# for x in g:
+#     print(x) # 注意，这里没有用next，直接打印值
+# # ===>
+# # 0
+# # 1
+# # 4
+# # 9
+# # 16
+
+# 可以看出，不用next()函数，直接使用for循环，就能取到generator的所有值，且不会存在抛出错误的情况
+
