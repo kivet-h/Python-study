@@ -80,3 +80,145 @@
 # 仔细观察，可以看出，fib函数实际上是定义了斐波拉契数列的推算规则，可以从第一个元素开始，推算出后续任意的元素，这种逻辑其实非常类似generator。
 # 也就是说，上面的函数和generator仅一步之遥。
 # 要把fib函数变成generator函数，只需要把print(b)改为yield b就可以了：
+# def fib(max):
+#     n, a, b = 0, 0, 1
+#     while n < max:
+#         yield b
+#         a, b = b, a + b
+#         n = n + 1
+#     return 'done'
+#
+# f = fib(6)
+# print(f) # ==> <generator object fib at 0x000001D1B04CC900>
+
+# 解释：
+# 这是定义generator的另一种方法。
+# 如果一个函数定义中包含 yield 关键字，那么这个函数就不再是一个普通函数，而是一个 generator 函数，调用一个 generator 函数将返回一个 generator
+
+
+# generator 函数的执行流程：（generator函数和普通函数的执行流程不一样）
+# 普通函数是顺序执行，遇到return语句或者最后一行函数语句就返回。
+# 而变成 generator 的函数，在每次调用next()的时候执行，遇到yield语句返回，再次执行时从上次返回的yield语句处继续执行。
+
+# 以上面例子为例
+# def fib(max):
+#     n, a, b = 0, 0, 1
+#     while n < max:
+#         yield b
+#         a, b = b, a + b
+#         n = n + 1
+#     return 'done'
+#
+# f = fib(6)
+# print(next(f)) # ==> 1
+# print(next(f)) # ==> 1
+# print(next(f)) # ==> 2
+# print(next(f)) # ==> 3
+# print(next(f)) # ==> 5
+# print(next(f)) # ==> 8
+# print(next(f)) # ==> 报错
+
+# 示例2：
+# def odd():
+#     print('step 11')
+#     yield 1
+#     print('step 22')
+#     yield 2
+#     print('step 33')
+#     yield 3
+#
+# o = odd()
+
+# 直接执行
+# next(o) # ==> step 11
+# next(o) # ==> step 22
+# next(o) # ==> step 33
+# next(o) # ==> 报错
+
+# 打印值：
+# print(next(o))
+# # ==> step 11
+# # ==> 1
+# print(next(o))
+# # ==> step 22
+# # ==> 2
+# print(next(o))
+# # ==> step 33
+# # ==> 3
+# print(next(o))
+# # ==> 报错
+
+# 代码解释：odd不是普通函数，而是generator函数，在执行过程中，遇到yield就中断，下次又继续执行。执行3次yield后，已经没有yield可以执行了，所以，第4次调用next(o)就报错。
+
+
+
+
+# 注意：
+# 调用generator函数会创建一个generator对象，多次调用generator函数会创建多个相互独立的generator。
+# def odd():
+#     print('step 11')
+#     yield 1
+#     print('step 22')
+#     yield 2
+#     print('step 33')
+#     yield 3
+#
+# next(odd()) # ==> step 11
+# next(odd()) # ==> step 11
+# next(odd()) # ==> step 11
+# next(odd()) # ==> step 11
+
+# 代码解释：上面多次next，返回的值都是一样的。这就是因为，odd()的时候会创建一个新的generator对象，即：上面代码实际上是创建了4个完全独立的generator，所以每次都是返回的第一个值。
+
+
+
+
+# 使用for...in遍历获取值：
+# def fib(max):
+#     n, a, b = 0, 0, 1
+#     while n < max:
+#         yield b
+#         a, b = b, a + b
+#         n = n + 1
+#     return 'done'
+#
+# for n in fib(6):
+#     print(n)
+
+# ==>
+# 1
+# 1
+# 2
+# 3
+# 5
+# 8
+
+
+# 上面示例输出结果可以看出，是拿不到最后return的done字符串的，如何能获取到？
+# def fib(max):
+#     n, a, b = 0, 0, 1
+#     while n < max:
+#         yield b
+#         a, b = b, a + b
+#         n = n + 1
+#     return 'done'
+#
+# g = fib(6)
+# while True:
+#      try:
+#          x = next(g)
+#          print('g:', x)
+#      except StopIteration as e:
+#          print('Generator return value:', e.value)
+#          break
+
+# ==>
+# g: 1
+# g: 1
+# g: 2
+# g: 3
+# g: 5
+# g: 8
+# Generator return value: done
+
+
